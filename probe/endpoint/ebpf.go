@@ -383,6 +383,7 @@ func (t *EbpfTracker) restart() error {
 	}
 
 	t.tracer = tracer
+	tracer.SetTimestampOffset(100000) // hold back events by 0.1 millisecond to avoid seeing them out of order
 	tracer.Start()
 
 	return nil

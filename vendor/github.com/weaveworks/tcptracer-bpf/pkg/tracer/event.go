@@ -37,9 +37,15 @@ func tcpV4ToGo(data *[]byte) (ret TcpV4) {
 	return
 }
 
+// Value added to all timestamps, to hold back events so they are less
+// likely to be reported out of order
+var (
+	timestampOffset uint64
+)
+
 func tcpV4Timestamp(data *[]byte) uint64 {
 	eventC := (*C.struct_tcp_ipv4_event_t)(unsafe.Pointer(&(*data)[0]))
-	return uint64(eventC.timestamp)
+	return uint64(eventC.timestamp) + timestampOffset
 }
 
 func tcpV6ToGo(data *[]byte) (ret TcpV6) {
@@ -72,5 +78,5 @@ func tcpV6ToGo(data *[]byte) (ret TcpV6) {
 
 func tcpV6Timestamp(data *[]byte) uint64 {
 	eventC := (*C.struct_tcp_ipv6_event_t)(unsafe.Pointer(&(*data)[0]))
-	return uint64(eventC.timestamp)
+	return uint64(eventC.timestamp) + timestampOffset
 }

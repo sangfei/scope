@@ -142,6 +142,13 @@ func (t *Tracer) RemoveFdInstallWatcher(pid uint32) (err error) {
 	return err
 }
 
+// Set a value added to all timestamps, to hold back events so they are less
+// likely to be reported out of order. Offset is in nanoseconds.
+func (t *Tracer) SetTimestampOffset(offset uint64) (err error) {
+	timestampOffset = offset
+	return nil
+}
+
 func (t *Tracer) Stop() {
 	close(t.stopChan)
 	t.perfMapIPV4.PollStop()
